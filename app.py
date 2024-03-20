@@ -147,15 +147,20 @@ def send_email():
 
 @app.route('/verify/<token>', methods=['GET'])
 def verify(token):
-    try:
-        if token in email_tokens.values():
-            emails = [key for key, value in email_tokens.items() if value == token][0]
-            data = request.args.to_dict()
-            uniqueigns = [data['team_name'], data['leader_ign'], data['leader_game_id'], data['leader_id_no'], data['leader_contact'], data['leader_email'], data['p2_ign'], data['p2_game_id'], data['p2_id_no'], data['p2_contact'], data['p3_ign'], data['p3_game_id'], data['p3_id_no'], data['p3_contact'], data['p4_ign'], data['p4_game_id'], data['p4_id_no'], data['p4_contact']]
+    if token in email_tokens.values():
+        emails = [key for key, value in email_tokens.items() if value == token][0]
+        data = request.args.to_dict()
+        # uniqueemails = [data['leader_email'], data['p2_email'], data['p3_email'], data['p4_email']]
+        uniqueigns = [data['team_name'], data['leader_ign'], data['leader_game_id'], data['leader_id_no'], data['leader_contact'], data['leader_email'], data['p2_ign'], data['p2_game_id'], data['p2_id_no'], data['p2_contact'], data['p3_ign'], data['p3_game_id'], data['p3_id_no'], data['p3_contact'], data['p4_ign'], data['p4_game_id'], data['p4_id_no'], data['p4_contact']]
 
+        try:
             for y in uniqueigns:
                 cursor.execute("INSERT INTO UniqueIGN (ign) VALUES (%s)", (y,))
             conn.commit()
+
+            # for x in uniqueemails:
+            #     cursor.execute("INSERT INTO UniqueEmails2 (email) VALUES (%s)", (x,))
+            # conn.commit()
 
             cursor.execute("INSERT INTO BGMIregistrations (team_name, college_name, leader_name, leader_ign, leader_game_id, leader_id_no, leader_contact, leader_email, p2_name, p2_ign, p2_game_id, p2_id_no, p2_contact, p3_name, p3_ign, p3_game_id, p3_id_no, p3_contact, p4_name, p4_ign, p4_game_id, p4_id_no, p4_contact) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                            (data['team_name'], data['college_name'], data['leader_name'], data['leader_ign'], data['leader_game_id'], data['leader_id_no'], data['leader_contact'], data['leader_email'], data['p2_name'], data['p2_ign'], data['p2_game_id'], data['p2_id_no'], data['p2_contact'], data['p3_name'], data['p3_ign'], data['p3_game_id'], data['p3_id_no'], data['p3_contact'], data['p4_name'], data['p4_ign'], data['p4_game_id'], data['p4_id_no'], data['p4_contact']))
@@ -163,8 +168,11 @@ def verify(token):
 
             del email_tokens[emails]
             return 'Authentication successful. You are now registered for BGMI in gameathon.'
-        else:
-            return jsonify({'message': 'Invalid or expired verification link.'}), 400
-    except mysql.connector.Error as e:
-        print("Error executing MySQL query:", e)
-        return jsonify({'message': 'An error occurred while verifying the token.'}), 500
+        except mysql.connector.Error as err:
+            print("Error inserting data:", err)
+            conn.rollback()
+            error_message = f"Error inserting data into database: {err}"
+            return jsonify({'message': error_message}), 500
+
+    else:
+        return jsonify({'message': 'Invalid or expired verification link.'}), 400
