@@ -64,7 +64,7 @@ def generate_token():
 
 
 def generate_auth_link(token, data):
-    auth_link = f'https://bgmiregistration.vercel.app/verify/{token}?'
+    auth_link = f'https://bgmiregistration-render.onrender.com/verify/{token}?'
     auth_link += urlencode(data)
     return auth_link
 
