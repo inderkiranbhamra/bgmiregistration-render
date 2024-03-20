@@ -146,12 +146,12 @@ def send_email():
     # if check_duplicate_email(data):
     #     return jsonify({'message': 'Duplicate email detected.'}), 400
 
-    result, duplicate_fields, duplicate_ign = check_duplicate_ign(data)
-    if result:
-        if duplicate_fields:
-            return jsonify({'message': f'Duplicate data found at {duplicate_fields}: {duplicate_ign}.'}), 400
-        else:
-            return jsonify({'message': 'Duplicate data detected.'}), 400
+   # result, duplicate_fields, duplicate_ign = check_duplicate_ign(data)
+    #if result:
+     #   if duplicate_fields:
+      #      return jsonify({'message': f'Duplicate data found at {duplicate_fields}: {duplicate_ign}.'}), 400
+       # else:
+        #    return jsonify({'message': 'Duplicate data detected.'}), 400
 
 
     email = data['leader_email']
