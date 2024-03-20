@@ -83,26 +83,26 @@ def generate_auth_link(token, data):
     auth_link += urlencode(data)
     return auth_link
 
-def check_duplicate_ign(data):
-    ign_set = set()
-    igns = [data['team_name'], data['leader_ign'], data['leader_game_id'], data['leader_id_no'], data['leader_contact'], data['leader_email'], data['p2_ign'], data['p2_game_id'], data['p2_id_no'], data['p2_contact'], data['p3_ign'], data['p3_game_id'], data['p3_id_no'], data['p3_contact'], data['p4_ign'], data['p4_game_id'], data['p4_id_no'], data['p4_contact']]
-    field_names = ['Team Name', 'Leader IGN', 'Leader Game ID', 'Leader ID Number', 'Leader Contact', 'Leader Email', 'P2 IGN', 'P2 Game ID', 'P2 ID Number', 'P2 Contact', 'P3 IGN', 'P3 Game ID', 'P3 ID Number', 'P3 Contact', 'P4 IGN', 'P4 Game ID', 'P4 ID Number', 'P4 Contact']
-    duplicate_fields = []
+#def check_duplicate_ign(data):
+#    ign_set = set()
+#    igns = [data['team_name'], data['leader_ign'], data['leader_game_id'], data['leader_id_no'], data['leader_contact'], data['leader_email'], data['p2_ign'], data['p2_game_id'], data['p2_id_no'], data['p2_contact'], data['p3_ign'], data['p3_game_id'], data['p3_id_no'], data['p3_contact'], data['p4_ign'], data['p4_game_id'], data['p4_id_no'], data['p4_contact']]
+#    field_names = ['Team Name', 'Leader IGN', 'Leader Game ID', 'Leader ID Number', 'Leader Contact', 'Leader Email', 'P2 IGN', 'P2 Game ID', 'P2 ID Number', 'P2 Contact', 'P3 IGN', 'P3 Game ID', 'P3 ID Number', 'P3 Contact', 'P4 IGN', 'P4 Game ID', 'P4 ID Number', 'P4 Contact']
+#    duplicate_fields = []
 
-    for i, ign in enumerate(igns):
-        if ign in ign_set:
-            print("Duplicate IGN detected at field", field_names[i], ":", ign)
-            duplicate_fields.append(field_names[i])
-            ign_set.add(ign)
+#    for i, ign in enumerate(igns):
+#        if ign in ign_set:
+#            print("Duplicate IGN detected at field", field_names[i], ":", ign)
+#            duplicate_fields.append(field_names[i])
+#            ign_set.add(ign)
 
-    for ign in igns:
-        cursor.execute("SELECT * FROM UniqueIGN WHERE ign = %s", (ign,))
-        result = cursor.fetchone()
-        if result:
-            print("Duplicate IGN detected:", ign)
-            return True, duplicate_fields, ign
+#    for ign in igns:
+#        cursor.execute("SELECT * FROM UniqueIGN WHERE ign = %s", (ign,))
+#        result = cursor.fetchone()
+#        if result:
+#            print("Duplicate IGN detected:", ign)
+#            return True, duplicate_fields, ign
 
-    return False, [], ''
+#    return False, [], ''
 
 @app.route('/')
 def index():
@@ -113,12 +113,12 @@ def send_email():
     data = request.get_json()
     token = generate_token()
 
-    result, duplicate_fields, duplicate_ign = check_duplicate_ign(data)
-    if result:
-        if duplicate_fields:
-            return jsonify({'message': f'Duplicate data found at {duplicate_fields}: {duplicate_ign}.'}), 400
-        else:
-            return jsonify({'message': 'Duplicate data detected.'}), 400
+#    result, duplicate_fields, duplicate_ign = check_duplicate_ign(data)
+#    if result:
+#        if duplicate_fields:
+#            return jsonify({'message': f'Duplicate data found at {duplicate_fields}: {duplicate_ign}.'}), 400
+#        else:
+#            return jsonify({'message': 'Duplicate data detected.'}), 400
 
     email = data['leader_email']
     email_tokens[email] = token
