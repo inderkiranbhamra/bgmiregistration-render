@@ -203,6 +203,8 @@ def verify(token):
         except mysql.connector.Error as err:
             print("Error inserting data:", err)
             conn.rollback()
-            return jsonify({'message': 'Error inserting data into database.'}), 500
+            error_message = f"Error inserting data into database: {err}"
+            return jsonify({'message': error_message}), 500
+
     else:
         return jsonify({'message': 'Invalid or expired verification link.'}), 400
