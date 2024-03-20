@@ -206,7 +206,3 @@ def verify(token):
             return jsonify({'message': 'Error inserting data into database.'}), 500
     else:
         return jsonify({'message': 'Invalid or expired verification link.'}), 400
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
